@@ -36,4 +36,18 @@ class AuthHelper {
             print("Unexpected error: \(error)")
         }
     }
+    
+    func confirmSignUp(for username: String, with confirmationCode: String) async {
+        do {
+            let confirmSignUpResult = try await Amplify.Auth.confirmSignUp(
+                for: username,
+                confirmationCode: confirmationCode
+            )
+            print("Confirm sign up result completed: \(confirmSignUpResult.isSignUpComplete)")
+        } catch let error as AuthError {
+            print("An error occurred while confirming sign up \(error)")
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
 }

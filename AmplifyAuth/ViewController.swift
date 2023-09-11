@@ -20,6 +20,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "GoCodeVC") {
+            let secondView = segue.destination as! ConfirmationCodeVC
+            
+            let object = sender as! [String: Any?]
+            secondView.username = object["username"] as? String
+        }
+    }
+    
 
     @IBAction func clickSignIn(_ sender: UIButton) {
     }
@@ -31,7 +41,12 @@ class ViewController: UIViewController {
                 password: edtSingUpPass.text ?? "",
                 email: edtSingUpEmail.text ?? ""
             )
+            
+            let sender: [String: Any?] = ["username": edtSingUpUsername.text ?? ""]
+            self.performSegue(withIdentifier: "GoCodeVC", sender: sender)
         }
+        
+        
     }
 }
 
