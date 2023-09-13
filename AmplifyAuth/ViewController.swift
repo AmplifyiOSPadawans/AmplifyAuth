@@ -16,9 +16,20 @@ class ViewController: UIViewController {
     @IBOutlet weak var edtSingUpPass: UITextField!
     @IBOutlet weak var edtSingUpEmail: UITextField!
     
+    @IBOutlet weak var fbLogo: UIImageView!
+    @IBOutlet weak var googleLogo: UIImageView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        let fbRecognizer = UITapGestureRecognizer(target: self, action: #selector(fbLogoTapped(tapGestureRecognizer:)))
+        fbLogo.isUserInteractionEnabled = true
+        fbLogo.addGestureRecognizer(fbRecognizer)
+        
+        let googleRecognizer = UITapGestureRecognizer(target: self, action: #selector(googleLogoTapped(tapGestureRecognizer:)))
+        googleLogo.isUserInteractionEnabled = true
+        googleLogo.addGestureRecognizer(googleRecognizer)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,6 +43,18 @@ class ViewController: UIViewController {
     
 
     @IBAction func clickSignIn(_ sender: UIButton) {
+        Task {
+            let isSucceed = await AuthHelper().signIn(
+                username: edtSingInUsername.text ?? "",
+                password: edtSingInPassword.text ?? ""
+            )
+            if isSucceed {
+                self.performSegue(withIdentifier: "GoWelcomeVC", sender: self)
+            } else {
+                showAlert(message: "An error occures")
+            }
+                
+        }
     }
     
     @IBAction func clickSignUp(_ sender: UIButton) {
@@ -47,6 +70,35 @@ class ViewController: UIViewController {
         }
         
         
+    }
+    
+    @objc func fbLogoTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        Task {
+            let isSucceed = await AuthHelper().socialSignInWithWebUI(with: .facebook, in: self.view.window!)
+            
+            if isSucceed {
+                self.performSegue(withIdentifier: "GoWelcomeVC", sender: self)
+            } else {
+                showAlert(message: "An error occures")
+            }
+        }
+        
+    }
+    
+    @objc func googleLogoTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        // TODO: Login with Google
+        showAlert(message: "Google Logo Tapped")
+    }
+    
+    func showAlert(message: String) {
+        let dialogMessage = UIAlertController(title: "Atention", message: message, preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            dialogMessage.dismiss(animated: true)
+        })
+        
+        dialogMessage.addAction(ok)
+        self.present(dialogMessage, animated: true, completion: nil)
     }
 }
 

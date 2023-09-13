@@ -20,11 +20,14 @@ class ConfirmationCodeVC: UIViewController {
     
     @IBAction func doConfirmationCode(_ sender: Any) {
         Task {
-            await AuthHelper().confirmSignUp(
+            let result = await AuthHelper().confirmSignUp(
                 for: username ?? "",
                 with: edtCode.text ?? ""
             )
-            self.dismiss(animated: true)
+            if result {
+                self.dismiss(animated: true)
+                self.performSegue(withIdentifier: "GoWelcomeVCFromCode", sender: self)
+            }
         }
     }
 }

@@ -19,6 +19,17 @@
 					<string>Main</string>
 				</dict>
 			</array>
+            
+            <key>CFBundleURLTypes</key>
+            <array>
+                <dict>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>myapp</string>
+                    </array>
+                </dict>
+            </array>
+            
 		</dict>
 	</dict>
 </dict>
