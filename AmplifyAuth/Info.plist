@@ -8,6 +8,15 @@
 		<false/>
 		<key>UISceneConfigurations</key>
 		<dict>
+			<key>CFBundleURLTypes</key>
+			<array>
+				<dict>
+					<key>CFBundleURLSchemes</key>
+					<array>
+						<string>myapp</string>
+					</array>
+				</dict>
+			</array>
 			<key>UIWindowSceneSessionRoleApplication</key>
 			<array>
 				<dict>
@@ -19,17 +28,6 @@
 					<string>Main</string>
 				</dict>
 			</array>
-            
-            <key>CFBundleURLTypes</key>
-            <array>
-                <dict>
-                    <key>CFBundleURLSchemes</key>
-                    <array>
-                        <string>myapp</string>
-                    </array>
-                </dict>
-            </array>
-            
 		</dict>
 	</dict>
 </dict>

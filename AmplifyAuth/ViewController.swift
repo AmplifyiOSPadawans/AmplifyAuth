@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class ViewController: UIViewController {
 
@@ -30,6 +31,28 @@ class ViewController: UIViewController {
         let googleRecognizer = UITapGestureRecognizer(target: self, action: #selector(googleLogoTapped(tapGestureRecognizer:)))
         googleLogo.isUserInteractionEnabled = true
         googleLogo.addGestureRecognizer(googleRecognizer)
+        
+        
+        /****************/
+        // Biometrics code
+        var error: NSError?
+        let context = LAContext()
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            context.evaluatePolicy(
+                .deviceOwnerAuthenticationWithBiometrics,
+                localizedReason: "Por favor autentícate para continuar"
+            ) { succeed, error in
+                if succeed {
+                    self.showAlert(message: "Autenticación biométrica completada")
+                } else {
+                    self.showAlert(message: "Error en la autenticación biométrica")
+                }
+            }
+        } else {
+            showAlert(message: "El dispositivo no soporta autenticación Biométrica")
+        }
+        /****************/
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -86,8 +109,15 @@ class ViewController: UIViewController {
     }
     
     @objc func googleLogoTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        // TODO: Login with Google
-        showAlert(message: "Google Logo Tapped")
+        Task {
+            let isSucceed = await AuthHelper().socialSignInWithWebUI(with: .google, in: self.view.window!)
+            
+            if isSucceed {
+                self.performSegue(withIdentifier: "GoWelcomeVC", sender: self)
+            } else {
+                showAlert(message: "An error occures")
+            }
+        }
     }
     
     func showAlert(message: String) {

@@ -7,6 +7,7 @@
 
 import Amplify
 import UIKit
+import AWSCognitoAuthPlugin
 
 
 class AuthHelper {
@@ -88,4 +89,25 @@ class AuthHelper {
         }
         return false
     }
+    
+    
+    func signOutGlobally() async -> Bool {
+        let result = await Amplify.Auth.signOut(options: .init(globalSignOut: true))
+        guard let signOutResult = result as? AWSCognitoSignOutResult
+        else {
+            print("Signout failed")
+            return false
+        }
+        
+        print("Local signout successful: \(signOutResult.signedOutLocally)")
+        switch signOutResult {
+            case .complete:
+                return true
+            case .failed(_):
+                return false
+            case .partial(_, _, _):
+                return true
+        }
+    }
+
 }

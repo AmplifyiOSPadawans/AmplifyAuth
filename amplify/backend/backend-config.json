@@ -16,7 +16,8 @@
           "EMAIL"
         ],
         "socialProviders": [
-          "FACEBOOK"
+          "FACEBOOK",
+          "GOOGLE"
         ],
         "usernameAttributes": [],
         "verificationMechanisms": [
